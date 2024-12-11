@@ -1,11 +1,12 @@
+
 [
     {
         "$match": {
-            "year": {
-                "$lt": 1950
-            },
             "imdb.rating": {
                 "$gte": 7.0
+            },
+            "year": {
+                "$lt": 1950
             }
         }
     },
@@ -18,16 +19,25 @@
         }
     },
     {
-        "$project": {
-            "title": 1,
-            "releaseYear": "$year",
-            "genres": 1,
-            "imdbRating": "$imdb.rating",
+        "$addFields": {
             "comments": {
                 "$slice": [
                     "$comments",
                     2
                 ]
+            }
+        }
+    },
+    {
+        "$project": {
+            "_id": 0,
+            "title": 1,
+            "releaseYear": "$year",
+            "genres": 1,
+            "imdbRating": "$imdb.rating",
+            "comments": {
+                "name": 1,
+                "text": 1
             }
         }
     }
